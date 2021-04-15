@@ -40,7 +40,6 @@ function Todo({
             onKeyUp={handledKeyUp}
             defaultValue={todo.text}
             style={{
-              border: "none",
               outline: "none",
               backgroundColor: "#bbfacd",
               flex: "1",

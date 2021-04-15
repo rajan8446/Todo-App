@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Todo.css";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import Todo from "../Todo";
+import Todo from "./Todo";
 
 function TodoList({ todo, setTodo, handleSubmit, todos, setTodos }) {
   const [todoEditing, setTodoEditing] = useState(null);
