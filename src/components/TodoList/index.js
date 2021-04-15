@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Todo.css";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Todo from "./Todo";
 
-function TodoList({ todo, setTodo, handleSubmit, todos, setTodos }) {
+function TodoList() {
   const [todoEditing, setTodoEditing] = useState(null);
   const [editingText, seteditingText] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [todos, setTodos] = useState([]);
+  const [todo, setTodo] = useState("");
 
-  //   useEffect(() => {
-  //     setShowEditoption(true);
-  //   }, [todoEditing]);
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (todo !== "") {
+      const newtodo = {
+        id: new Date().getTime(),
+        text: todo,
+      };
+      setTodos([...todos].concat(newtodo));
+      setTodo("");
+    }
+  }
   function deletetodo(id) {
     const updatetodos = [...todos].filter((todo) => todo.id !== id);
     setTodos(updatetodos);
