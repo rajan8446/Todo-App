@@ -4,3 +4,9 @@
   width: 30vw;
   height: 80vh;
 }
+
+.progress-heading {
+  padding: 20px;
+  margin-top: 0px;
+  background-color: lightcoral;
+}

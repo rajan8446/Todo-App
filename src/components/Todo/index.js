@@ -1,109 +1,104 @@
 import React, { useState } from "react";
-import "./todo.css";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function Todo({
+  deletetodo,
   todo,
-  setTodo,
-  handleSubmit,
-  todos,
-  setTodos,
-  draggableParentID,
-  setdraggableParentID,
+  editTodo,
+  todoEditing,
+  setTodoEditing,
+  seteditingText,
+  handledKeyUp,
+  disabled,
 }) {
-  const [todoEditing, setTodoEditing] = useState(null);
-  const [editingText, seteditingText] = useState("");
-  const [disabled, setDisabled] = useState(false);
-
-  function deletetodo(id) {
-    const updatetodos = [...todos].filter((todo) => todo.id !== id);
-    setTodos(updatetodos);
-  }
-
-  const handledKeyUp = (event) => {
-    console.log(event.target.value);
-    if (event.target.value === "") setDisabled(true);
-    else setDisabled(false);
-  };
-
-  function editTodo(id) {
-    if (editingText !== "") {
-      const updatetodos = [...todos].map((todo) => {
-        if (todo.id === id) {
-          todo.text = editingText;
-        }
-        return todo;
-      });
-
-      setTodos(updatetodos);
-      setTodoEditing(null);
-      seteditingText("");
-    }
-  }
+  const [showEditoption, setShowEditoption] = useState(true);
 
   function drag(e) {
-    setdraggableParentID(e.target.parentNode.id);
-    console.log(e.target.id);
     e.dataTransfer.setData("text", e.target.id);
+    e.dataTransfer.setData("parentClass", e.target.parentNode.className);
+    setShowEditoption(false);
   }
 
   return (
-    <div className="todo">
-      <h3 className="todo-heading">Todo</h3>
-      <form>
-        <textarea
-          id="task"
-          type="text"
-          onChange={(e) => setTodo(e.target.value)}
-          value={todo}
-        ></textarea>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="btn" type="submit" onClick={(e) => handleSubmit(e)}>
-          Add
-        </button>
-      </form>
-      <div>
-        {todos.map((todo) => (
-          <div key={todo.id}>
+    <>
+      <div
+        key={todo.id}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: "5px",
+          backgroundColor: "#bbfacd",
+        }}
+      >
+        {todoEditing === todo.id ? (
+          <input
+            type="text"
+            onChange={(e) => seteditingText(e.target.value)}
+            onKeyUp={handledKeyUp}
+            defaultValue={todo.text}
+            style={{
+              border: "none",
+              outline: "none",
+              backgroundColor: "#bbfacd",
+              flex: "1",
+              padding: "5px",
+            }}
+          />
+        ) : (
+          <div
+            className="list"
+            id={todo.id}
+            draggable
+            onDragStart={drag}
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              backgroundColor: "#bbfacd",
+              margin: "5px",
+              padding: "5px",
+              flex: "1",
+            }}
+          >
+            {todo.text}
+          </div>
+        )}
+
+        {showEditoption && (
+          <div style={{ marginLeft: "10px", display: "flex" }}>
+            <div
+              className="delete"
+              onClick={() => deletetodo(todo.id)}
+              title="delete"
+              style={{ cursor: "pointer" }}
+            >
+              <DeleteIcon />
+            </div>
             {todoEditing === todo.id ? (
-              <input
-                type="text"
-                onChange={(e) => seteditingText(e.target.value)}
-                onKeyUp={handledKeyUp}
-                defaultValue={todo.text}
-              />
-            ) : (
               <div
-                className="list"
-                id={todo.id}
-                draggable
-                onDragStart={drag}
+                onClick={() => editTodo(todo.id)}
+                disabled={disabled}
+                title="update"
                 style={{ cursor: "pointer" }}
               >
-                {todo.text}
+                <CheckCircleIcon />
+              </div>
+            ) : (
+              <div
+                className="edit"
+                onClick={() => setTodoEditing(todo.id)}
+                title="edit"
+                style={{ cursor: "pointer" }}
+              >
+                <EditIcon />
               </div>
             )}
-
-            <div>
-              <button className="delete" onClick={() => deletetodo(todo.id)}>
-                delete
-              </button>
-              {todoEditing === todo.id ? (
-                <button onClick={() => editTodo(todo.id)} disabled={disabled}>
-                  update
-                </button>
-              ) : (
-                <button
-                  className="edit"
-                  onClick={() => setTodoEditing(todo.id)}
-                >
-                  Edit
-                </button>
-              )}
-            </div>
           </div>
-        ))}
+        )}
       </div>
-    </div>
+    </>
   );
 }
 

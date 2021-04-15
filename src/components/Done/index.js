@@ -6,8 +6,9 @@ function Done() {
     e.preventDefault();
 
     let draggableID = e.dataTransfer.getData("text");
+
     let draggable = document.getElementById(draggableID);
-    // console.log(draggableID, "done");
+    draggable.setAttribute("draggable", "false");
 
     let container = document.getElementsByClassName("done-list")[0];
 
